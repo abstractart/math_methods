@@ -34,6 +34,14 @@ module MathMethods::Spectral
     result
   end
 
+  def self.get_weak_value(experts_cmp,values)
+    average = get_average(experts_cmp, values)
+    experts_cmp.map.with_index{|c, i| ((values[i] - average).abs / c).round(3) }
+  end
+
+  def self.get_weak_expert(experts_cmp, values)
+    get_weak_value(experts_cmp, values).each_with_index.max
+  end
   private
 
   def self.func_g(experts_count,div_count)
