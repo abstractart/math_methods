@@ -13,6 +13,18 @@ RSpec.describe MathMethods::Concordation do
     expect(result).to eq(0.26) #0.2375 in book
   end
 
+  it "Equals one with same answers" do
+    c = [0.2, 0.3, 0.5]
+    r = 
+    [
+      [1, 2, 3, 4, 5],
+      [1, 2, 3, 4, 5],
+      [1, 2, 3, 4, 5]    
+    ]
+    result = MathMethods::Concordation.get_coef(c, r)
+    expect(result).to eq(1.00)
+  end
+
   it "Production Example" do
     c = [
       0.13, 0.12, 0.11, 0.1, 0.1, 
