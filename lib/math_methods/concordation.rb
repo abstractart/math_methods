@@ -11,10 +11,7 @@ module MathMethods::Concordation
     m = n-l+1 #experts count
     experts = [1.0/m]*m
     #binding.pry
-    init_range = []
-    for i in 1..n
-      init_range << i
-    end
+    init_range = (1..n).to_a.shuffle
 
     ranges = []
     ranges << init_range
