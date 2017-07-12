@@ -21,25 +21,27 @@ class MathMethods::NewConcordation
 
   def self.get_using_treshold(alt_count, l)
     init_range = (1..alt_count).to_a.shuffle
-    ranges = [init_range]
+    new_ranges = get_new_ranges(init_range, l) << init_range
     exp_count = (alt_count + 1 - l)
     competitions = [1.0/exp_count]*exp_count
 
-    for i in 1..alt_count - l
+    MathMethods::NewConcordation.new(competitions: competitions, ranges: new_ranges).get_coef
+  end
+
+  def self.get_new_ranges(init_range, l)
+    (1..init_range.length-l).to_a.map do |r|
       tmp = init_range.clone
-      first_alternative = tmp.index(i)
-      second_alternative = tmp.index(i + l)
+      first_alternative = tmp.index(r)
+      second_alternative = tmp.index(r + l)
 
       temp_for_swap = tmp[first_alternative]
       tmp[first_alternative] = tmp[second_alternative]
       tmp[second_alternative] = temp_for_swap
 
-      ranges << tmp
+      tmp
     end
-
-    MathMethods::NewConcordation.new(competitions: competitions, ranges: ranges).get_coef
   end
-
+  
   private
 
   def denominator

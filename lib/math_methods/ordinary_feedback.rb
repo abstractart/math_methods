@@ -1,0 +1,37 @@
+class MathMethods::OrdinaryFeedback
+  attr_reader :competitions
+  attr_reader :ranges
+  attr_reader :alt_count
+  attr_reader :exp_count
+  attr_reader :expert_stats
+
+  def initialize(args)
+    @competitions = args[:competitions]
+    @ranges = args[:ranges]
+    @expert_stats = args[:expert_stats]
+
+    @exp_count = @competitions.length
+    @alt_count = @ranges[0].length
+  end
+
+  def generate_request
+    result = {}
+    
+    fill_hash(result, 0)
+    expert_stats.each_with_index do |stat, i|
+      if stat < result[:count_of_changes] ||
+         (stat == result[:count_of_changes] && competitions[i] < result[:competition])
+        fill_hash(result, i)
+      end
+    end
+    result
+  end
+
+    private
+
+    def fill_hash(hash, index)
+      hash[:count_of_changes] = expert_stats[index]
+      hash[:expert_index]     = index
+      hash[:competition]      = competitions[index]     
+    end 
+  end
