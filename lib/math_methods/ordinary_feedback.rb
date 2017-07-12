@@ -4,14 +4,15 @@ class MathMethods::OrdinaryFeedback
   attr_reader :alt_count
   attr_reader :exp_count
   attr_reader :expert_stats
+  attr_reader :consistency_coef
 
   def initialize(args)
     @competitions = args[:competitions]
     @ranges = args[:ranges]
     @expert_stats = args[:expert_stats]
-
     @exp_count = @competitions.length
     @alt_count = @ranges[0].length
+    @consistency_coef = MathMethods::NewConcordation.new(ranges: @ranges, competitions: competitions).get_coef
   end
 
   def generate_request
@@ -24,7 +25,14 @@ class MathMethods::OrdinaryFeedback
         fill_hash(result, i)
       end
     end
-    result
+    
+    weak_range = ranges[result[:expert_index]]
+    new_ranges = MathMethods::NewConcordation.get_new_ranges(weak_range, 1)
+    ranges_with_cf = new_ranges.map do |nr|
+      temp_ranges = ranges.clone
+      temp_ranges[result[:expert_index]] = nr
+      [nr, MathMethods::NewConcordation.new(ranges: temp_ranges, competitions: competitions).get_coef]
+    end
   end
 
     private

@@ -47,7 +47,12 @@ RSpec.describe MathMethods::NewConcordation do
         ]}   
       it "Coefficient value" do
         result = MathMethods::NewConcordation.new(competitions: c, ranges: r).get_coef
-      expect(result).to be_within(0.001).of(0.667)
+        expect(result).to be_within(0.001).of(0.667)
+      end
+
+      it "Feedback" do
+        result = MathMethods::OrdinaryFeedback.new(competitions: c, ranges: r, expert_stats: [0,0,0,0,0,0,0,0,0,0]).generate_request
+        expect(result).to eq([])
       end
     end       
   end
