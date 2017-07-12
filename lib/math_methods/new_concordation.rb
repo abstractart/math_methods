@@ -25,7 +25,7 @@ class MathMethods::NewConcordation
 
   private
 
-  def self.denominator
+  def denominator
     alt_count ** 3 - alt_count
   end
 
