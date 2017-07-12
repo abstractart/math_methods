@@ -19,8 +19,25 @@ class MathMethods::NewConcordation
     return (24.0/(exp_count**2 * denominator(alt_count)))
   end
 
-  def self.get_using_treshold(n,l)
+  def self.get_using_treshold(alt_count, l)
+    init_range = (1..alt_count).to_a.shuffle
+    ranges = [init_range]
+    exp_count = (alt_count + 1 - l)
+    competitions = [1.0/exp_count]*exp_count
 
+    for i in 1..alt_count - l
+      tmp = init_range.clone
+      first_alternative = tmp.index(i)
+      second_alternative = tmp.index(i + l)
+
+      temp_for_swap = tmp[first_alternative]
+      tmp[first_alternative] = tmp[second_alternative]
+      tmp[second_alternative] = temp_for_swap
+
+      ranges << tmp
+    end
+
+    MathMethods::NewConcordation.new(competitions: competitions, ranges: ranges).get_coef
   end
 
   private
