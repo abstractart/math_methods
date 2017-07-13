@@ -33,7 +33,8 @@ class MathMethods::OrdinaryFeedback
       temp_ranges[result[:expert_index]] = nr
       [MathMethods::NewConcordation.new(ranges: temp_ranges, competitions: competitions).get_coef, nr]
     end
-    best_range = ranges_with_cf.max
+    best_range = ranges_with_cf.max #тонкий момент, возможно не всегда стоит выбирать максимальный 
+                                    #так как он может затрагивать изменения ранжирования высоких рангов(например поменять местами альтернативы 1 и 2)
     result[:best_range] = best_range[1]
     result[:new_cf]     = best_range[0]
 
