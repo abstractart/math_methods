@@ -7,5 +7,8 @@ require "math_methods/spectral"
 require "math_methods/ordinary_feedback"
 
 module MathMethods
-  # Your code goes here...
+  def self.normalize_competitions(competitions)
+    sum = competitions.reduce(:+)
+    competitions.map {|c| c / sum}
+  end
 end
