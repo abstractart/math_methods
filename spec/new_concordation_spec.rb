@@ -51,8 +51,15 @@ RSpec.describe MathMethods::NewConcordation do
       end
 
       it "Feedback" do
-        result = MathMethods::OrdinaryFeedback.new(competitions: c, ranges: r, expert_stats: [0,0,0,0,0,0,0,0,0,0]).generate_request
-        expect(result).to eq([])
+        result = MathMethods::OrdinaryFeedback.new(
+          competitions: c, 
+          ranges: r, 
+          expert_stats: [0,0,0,0,0,0,0,0,0,0]).generate_request
+        
+        expect(result[:expert_index]).to eq(9)
+        expect(result[:competition]).to eq(0.065)
+        expect(result[:best_range]).to eq([5, 3, 1, 2, 4])
+        expect(result[:new_cf]).to eq(0.676091)
       end
     end       
   end
