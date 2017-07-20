@@ -13,12 +13,11 @@ class MathMethods::PosterioriCompetition
 
   def get_new_coefficients
     rejections = ranges.map {|er| rejection.get(er, result_range) }
-    d_t_max = rejection.max
-    competitions.with_index.map do |c, i|
+    d_t_max = rejections.max
+    competitions.map.with_index do |c, i|
       new_competition(
           new_potential(
-              start_potential(c, b), 
-              T, 
+              start_potential(c, b),
               rejections[i], #d_t
               d_t_max), 
           b)
@@ -40,39 +39,41 @@ class MathMethods::PosterioriCompetition
     2 * Math.log(c1 / (1 - c1))
   end
 
-  def T
+  def t
     50
   end
 
+    
   def new_competition(potential, b)
-    1 / (1 + Math.exp(-b * (potential - 0.5)))
+    1.0 / (1.0 + Math.exp(- b * (potential - 0.5)))
   end
 
+  #right
   def start_potential(competition, b)
-    0.5 - 1 / b * Math.log((1 - competition) / competition)
+    0.5 - 1 / b * Math.log((1.0 - competition) / competition)
   end
 
-  def new_potential(potential, T, d_t, d_t_max)
-    potential + 0.5 / T - 1 / T * d_t / d_t_max
+  def new_potential(potential, d_t, d_t_max)
+    potential + 0.5 / t - 1.0 / t * d_t / d_t_max
   end
 end
 
 class MathMethods::CardinalRejection
   def get(expert_range,result_range)
-    result = 0
+    result = 0.0
     for i in 0...expert_range.count
-      result += (expert_range[i] - result_range[i]) ** 2
+      result += (expert_range[i] - result_range[i]) ** 2.0
     end
-    return Math.sqrt(result)
+    Math.sqrt(result)
   end
 end
 
 class MathMethods::OrdinalRejection
   def get(expert_range,result_range)
-    result = 0
+    result = 0.0
     for i in 0...expert_range.count
       result += (expert_range[i] - result_range[i]).abs
     end
-    result
+    result.to_f
   end
 end
