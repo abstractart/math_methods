@@ -16,9 +16,6 @@ module MathMethods::Gulyanitzky
     	end
     	result_matr << result_row
     end
-    m = Munkres.new(result_matr)
-    result =  m.find_pairings
-    result.each_index do |row|
-    end 
+    Munkres.new(result_matr).find_pairings
   end
 end
