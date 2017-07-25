@@ -67,6 +67,6 @@ class MathMethods::NewConcordation
   end
   
   def outer_sum_element(outer_index)
-    ((alt_count + 1) / 2 - inner_sum(outer_index))**2
+    ((alt_count + 1.0) / 2.0 - inner_sum(outer_index))**2
   end
 end
