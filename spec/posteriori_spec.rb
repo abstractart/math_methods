@@ -26,4 +26,24 @@ context "simple task"
     end
     expect(c).to eq([2, 2.2, 2.4, 2.1, 1.3])
   end
+  context do
+    let(:r) {[
+      [1, 2, 3, 4],
+      [2, 1, 3, 4],
+      [1, 2, 4, 3],
+      [2, 1, 3, 4]    
+      ]}
+      let(:a) { [1, 2, 3, 4] }
+    it "works well #2" do
+        c = [0.4, 0.3, 0.15, 0.05]
+        1.times do
+          c = MathMethods::PosterioriCompetition.new(
+            competitions: c, 
+            ranges: r, 
+            result_range: a, 
+            task_type: :ordinal).get_new_coefficients
+        end
+        expect(c).to eq([2, 2.2, 2.4, 2.1, 1.3])        
+    end
+  end
 end

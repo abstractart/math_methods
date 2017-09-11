@@ -2,11 +2,13 @@ require "spec_helper"
 
 RSpec.describe MathMethods::NewConcordation do
   context "Totsenko book" do
-    let(:c) {[0.2, 0.3, 0.5]}
+    
+    let(:c) {[0.444, 0.333, 0.167, 0.056]}
     let(:r) {[
-      [1, 2, 3, 4, 5],
-      [5, 4, 3, 2, 1],
-      [4, 3, 2, 1, 5]    
+      [1, 2, 3, 4],
+      [2, 1, 3, 4],
+      [1, 2, 4, 3],
+      [2, 1, 3, 4]    
       ]} 
 
     it "Coefficient" do
@@ -15,12 +17,12 @@ RSpec.describe MathMethods::NewConcordation do
     end
 
     skip "Using Treshold weak(function)" do
-      result = MathMethods::NewConcordation.get_using_treshold(5, 2)
+      result = MathMethods::NewConcordation.get_using_treshold(4, 2)
       expect(result).to eq(0.575)
     end
 
     it "Using Treshold strong(function)" do
-      result = MathMethods::NewConcordation.get_using_treshold(5, 1)
+      result = MathMethods::NewConcordation.get_using_treshold(4, 1)
       expect(result).to be_within(0.01).of(0.848)
     end
   end
