@@ -2,24 +2,66 @@ require "spec_helper"
 
 RSpec.describe MathMethods::RatingsCollection do
   it "Ratings Collection" do
-    ratings = [
-      {alternative_id: 1, expert_id: 1, value: 1 },
-      {alternative_id: 2, expert_id: 1, value: 2 },
-      {alternative_id: 3, expert_id: 1, value: 3 },
-      
-      {alternative_id: 1, expert_id: 2, value: 1 },
-      {alternative_id: 2, expert_id: 2, value: 2 },
-      {alternative_id: 3, expert_id: 2, value: 3 },
-      
-      {alternative_id: 1, expert_id: 3, value: 1 },
-      {alternative_id: 2, expert_id: 3, value: 2 },
-      {alternative_id: 3, expert_id: 3, value: 3 },
+    r = 
+    [
+      {
+        expert: :e1,
+        values: [
+          {
+            alternative: :a1,
+            rating: 1
+          },
+          {
+            alternative: :a2,
+            rating: 2
+          },
+          {
+            alternative: :a3,
+            rating: 3
+          }
+        ]                                        
+      },
+      {
+        expert: :e2,
+        values: [
+          {
+            alternative: :a1,
+            rating: 2
+          },
+          {
+            alternative: :a2,
+            rating: 3
+          },
+          {
+            alternative: :a3,
+            rating: 1
+          }
+        ]
+      },
+      {
+        expert: :e3,
+        values: [
+          {
+            alternative: :a1,
+            rating: 3
+          },
+          {
+            alternative: :a2,
+            rating: 2
+          },
+          {
+            alternative: :a3,
+            rating: 1
+          }
+        ]
+      },
     ]
-    collection = MathMethods::RatingsCollection.new(ratings)
+    collection = MathMethods::RatingsCollection.new(r)
     expect(collection.ratings).to eq(
-      { 1 => {1 => 1, 2 => 1, 3 => 1}, 
-        2 => {1 => 2, 2 => 2, 3 => 2},
-        3 => {1 => 3, 2 => 3, 3 => 3}
-      })
+      { e1: { a1: 1, a2: 2, a3: 3 }, 
+        e2: { a1: 2, a2: 3, a3: 1 },
+        e3: { a1: 3, a2: 2, a3: 1 }
+      }
+    )
   end
 end

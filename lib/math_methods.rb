@@ -9,6 +9,7 @@ require "math_methods/posteriori_competition"
 require "math_methods/task_model"
 require "math_methods/ratings_collection"
 require "math_methods/competitions_collection"
+require "math_methods/solution"
 
 module MathMethods
   def self.normalize_competitions(competitions)

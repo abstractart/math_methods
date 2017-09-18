@@ -4,11 +4,11 @@ class MathMethods::CompetitionsCollection
   def initialize(competitions) #experts[e]
     @competitions = Hash.new
     competitions.each do |c|
-      @competitions[c[:expert_id]] = c[:cf]
+      @competitions[c[:expert]] = c[:cf]
     end
   end
 
-  def get_for(expert_id)
-    competitions[expert_id]
+  def get_for(e)
+    competitions[e]
   end
 end

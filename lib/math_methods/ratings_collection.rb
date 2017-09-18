@@ -4,20 +4,22 @@ class MathMethods::RatingsCollection
   def initialize(ratings) #ratings[a][e]
     @ratings = Hash.new
     ratings.each do |r|
-      @ratings[r[:alternative_id]] ||= Hash.new
-      @ratings[r[:alternative_id]][r[:expert_id]] = r[:value]
+      @ratings[r[:expert]] ||= Hash.new
+      r[:values].each do |v|
+        @ratings[r[:expert]][v[:alternative]] = v[:rating]
+      end
     end
   end
 
-  def for_expert(key)
-    Hash.new(@ratings.keys.map { |a| [a, ratings[a][key]]})
+  def for_alternative(a)
+    Hash.new(ratings.keys.map { |e| [e, ratings[e][a]]})
   end
 
-  def get(alternative_id, expert_id)
-    @ratings[alternative_id][expert_id]
+  def get(e, a)
+    ratings[e][a]
   end
 
-  def for_alternative(key)
-    @ratings[key]
+  def for_expert(e)
+    ratings[e]
   end
 end
