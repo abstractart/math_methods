@@ -83,32 +83,4 @@ RSpec.describe MathMethods::NewConcordation do
       expect(results_hash).to eq({})
     end
   end
-
-  context "Production tasks" do
-    skip "Task 1" do
-      c = [0.438718799148562, 0.0571175435051578, 0.28751997064578, 0.216643686700498]
-      r = 
-      [
-        [4, 3, 2, 1],
-        [3, 4, 1, 2],
-        [3, 4, 2, 1],
-        [4, 3, 1, 2]
-      ]
-      result = MathMethods::NewConcordation.new(competitions: c, ranges: r).get_coef
-      expect(result).to be_within(0.01).of(1)
-    end
-
-    skip "Task 2" do
-      c = [0.438718799148562, 0.0571175435051578, 0.28751997064578, 0.216643686700498]
-      r = 
-      [
-        [1, 3, 4, 2],
-        [2, 3, 4, 1],
-        [1, 3, 4, 2],
-        [1, 3, 4, 2]
-      ]
-      result = MathMethods::NewConcordation.new(competitions: c, ranges: r).get_coef
-      expect(result).to be_within(0.01).of(1)
-    end
-  end
 end
