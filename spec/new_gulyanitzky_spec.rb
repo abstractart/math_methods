@@ -305,6 +305,6 @@ RSpec.describe MathMethods::NewGulyanitzky do
     ]
     task = MathMethods::TaskModel.new(a, e, c, r)
     result = MathMethods::NewGulyanitzky.new(task).get_result
-    expect(result).to eq([[0, 4], [1, 2], [2, 0], [3, 1], [4, 3]])    
+    expect(result.range).to eq({ 1=>:a3, 2=>:a4, 3=>:a2, 4=> :a5, 5 => :a1 })    
   end
 end
