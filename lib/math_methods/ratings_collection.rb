@@ -12,7 +12,7 @@ class MathMethods::RatingsCollection
   end
 
   def for_alternative(a)
-    Hash.new(ratings.keys.map { |e| [e, ratings[e][a]]})
+    ratings.keys.map { |e| [e, ratings[e][a]] }.to_h
   end
 
   def get(e, a)

@@ -38,7 +38,7 @@ class MathMethods::Concordation
       tmp_range
     end
     result << init_range
-    binding.pry
+
     experts.zip(result).map do |range|
       r = {}
       r[:expert] = range.first
