@@ -14,8 +14,8 @@ class MathMethods::Concordation
   end
 
   def self.u_t(alt_count, l)
-    alternatives = ("a1".."a#{alt_count}").to_a
-    experts      = ("e1".."e#{alt_count + 1 - l}").to_a
+    alternatives = (1..alt_count).to_a
+    experts      = (1..(alt_count + 1 - l)).to_a
     competitions = experts.map { |e| { expert: e, cf: 1.0 / experts.size } }
     ratings = ranges(experts, alternatives, l)
     task = MathMethods::TaskModel.new(alternatives, experts, competitions, ratings)
