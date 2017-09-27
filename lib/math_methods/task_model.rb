@@ -4,13 +4,17 @@ class MathMethods::TaskModel
   attr_reader :ratings
   attr_reader :experts
   attr_reader :stats
-
+  attr_reader :original_ratings
+  attr_reader :original_competitions
+  
   def initialize(alternatives, experts, competitions, ratings, stats = [])
-    @experts      = experts
-    @alternatives = alternatives
-    @ratings      = MathMethods::RatingsCollection.new(ratings)
-    @competitions = MathMethods::CompetitionsCollection.new(competitions)
-    @stats        = MathMethods::StatsCollection.new(stats)
+    @experts          = experts
+    @alternatives     = alternatives
+    @ratings          = MathMethods::RatingsCollection.new(ratings)
+    @competitions     = MathMethods::CompetitionsCollection.new(competitions)
+    @stats            = MathMethods::StatsCollection.new(stats)
+    @original_ratings = ratings
+    @original_competitions = competitions
   end
 end
 

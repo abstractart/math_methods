@@ -365,11 +365,29 @@ RSpec.describe MathMethods::Concordation do
             rating: 4
           }
         ]
-      }                          
+      } 
     ]
-    task = MathMethods::TaskModel.new(a, e, c, r)
+    s = e.map { |expert| { expert: expert, count_of_changes: 0 } }
+
     it 'Coefficient' do
+      task = MathMethods::TaskModel.new(a, e, c, r)
       expect(MathMethods::Concordation.new(task).coef).to be_within(0.001).of(0.667)
+    end
+
+    it 'Feedback' do
+      task = MathMethods::TaskModel.new(a, e, c, r, s)
+      result = 
+      {
+        expert: :e10,
+        cf: 0.676091,
+        range: [
+          {alternative: :a1, rating: 5}, 
+          {alternative: :a2, rating: 3}, 
+          {alternative: :a4, rating: 2}, 
+          {alternative: :a3, rating: 1}, 
+          {alternative: :a5, rating: 4}]
+      }
+      expect(MathMethods::OrdinaryFeedback.new(task).get).to eq(result)
     end
   end
 end
