@@ -35,33 +35,6 @@ class MathMethods::Concordation
     self.new(task).coef
   end
  
-# rating
-{
-  expert: :e1,
-  values: [
-    {
-      alternative: :a1,
-      range: 1
-    },
-    {
-      alternative: :a2,
-      range: 2
-    },
-    {
-      alternative: :a3,
-      range: 3
-    },
-    {
-      alternative: :a4,
-      range: 4
-    },
-    {
-      alternative: :a5,
-      range: 5
-    },                
-  ]
-}
-
   def self.generate_ranges(range, l)
     range_hash = range.map {|r| [r[:rating], r[:alternative]]}.to_h
     
