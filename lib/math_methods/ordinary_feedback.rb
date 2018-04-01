@@ -32,7 +32,7 @@ class MathMethods::OrdinaryFeedback
     {
       expert: weak_expert,
       cf:     best.last,
-      old_range:  weak_range,
+      old_range:  weak_range[:values],
       new_range:  best.first
     } 
   end
