@@ -380,7 +380,13 @@ RSpec.describe MathMethods::Concordation do
       {
         expert: :e10,
         cf: 0.676091,
-        range: [
+        old_range: [
+          {alternative: :a1, rating: 5},
+          {alternative: :a2, rating: 3},
+          {alternative: :a3, rating: 2},
+          {alternative: :a4, rating: 1},
+          {alternative: :a5, rating: 4}],
+        new_range: [
           {alternative: :a1, rating: 5}, 
           {alternative: :a2, rating: 3}, 
           {alternative: :a4, rating: 2}, 
