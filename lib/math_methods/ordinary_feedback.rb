@@ -15,7 +15,7 @@ class MathMethods::OrdinaryFeedback
       end
     end
 
-    weak_range = task.original_ratings.select {|h| h[:expert] == weak_expert}.first
+    weak_range = task.ratings[weak_expert]
     suggestions = MathMethods::Concordation.generate_ranges(weak_range[:values], 1)
 
     result = suggestions.map do |s|
@@ -32,7 +32,7 @@ class MathMethods::OrdinaryFeedback
     {
       expert: weak_expert,
       cf:     best.last,
-      old_range:  weak_range[:values],
+      old_range:  weak_range,
       new_range:  best.first
     } 
   end
