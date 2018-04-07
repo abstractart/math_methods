@@ -1,151 +1,71 @@
 require "spec_helper"
 
-RSpec.describe MathMethods::BordsMethod do
-
-  it "Example from Totsenko" do
-    e = [:e1, :e2, :e3, :e4]
-    
-    c = 
-    [
-      { 
-        expert: :e1,
-        cf: 0.4
-      },
-      { 
-        expert: :e2,
-        cf: 0.3
-      },
-      { 
-        expert: :e3,
-        cf: 0.2
-      },
-      { 
-        expert: :e4,
-        cf: 0.1
-      }
-    ]
-
-    a = [:a1, :a2, :a3, :a4, :a5]
-
-    r = 
-    [
-      {
-        expert: :e1,
-        values: [
+RSpec.describe MathMethods::Concordation do
+  context "Totsenko book" do
+    let (:task) {
+      MathMethods::TaskModel.new(
+        [:a, :b, :c, :d, :e], 
+        [:e1, :e2, :e3], 
+        [
+          { expert: :e1, cf: 0.2 },
+          { expert: :e2, cf: 0.3 }, 
+          { expert: :e3, cf: 0.5 }
+        ],
+        [
           {
-            alternative: :a1,
-            rating: 1
+            expert: :e1,
+            values: [
+              { alternative: :a, rating: 1 },
+              { alternative: :b, rating: 2 },
+              { alternative: :c, rating: 3 },
+              { alternative: :d, rating: 4 },
+              { alternative: :e, rating: 5 }
+            ]
           },
           {
-            alternative: :a2,
-            rating: 2
+            expert: :e2,
+            values: [
+              { alternative: :a, rating: 5 },
+              { alternative: :b, rating: 4 },
+              { alternative: :c, rating: 3 },
+              { alternative: :d, rating: 2 },
+              { alternative: :e, rating: 1 }
+            ]
           },
           {
-            alternative: :a3,
-            rating: 3
-          },
-          {
-            alternative: :a4,
-            rating: 4
-          },
-          {
-            alternative: :a5,
-            rating: 5
-          }
+            expert: :e3,
+            values: [
+              { alternative: :a, rating: 4 },
+              { alternative: :b, rating: 3 },
+              { alternative: :c, rating: 2 },
+              { alternative: :d, rating: 1 },
+              { alternative: :e, rating: 5 }
+            ]
+          }                   
         ]
-      },
-      {
-        expert: :e2,
-        values: [
-          {
-            alternative: :a1,
-            rating: 5
-          },
-          {
-            alternative: :a2,
-            rating: 4
-          },
-          {
-            alternative: :a3,
-            rating: 3
-          },
-          {
-            alternative: :a4,
-            rating: 2
-          },
-          {
-            alternative: :a5,
-            rating: 1
-          }
-        ]
-      },
-      {
-        expert: :e3,
-        values: [
-          {
-            alternative: :a1,
-            rating: 4
-          },
-          {
-            alternative: :a2,
-            rating: 3
-          },
-          {
-            alternative: :a3,
-            rating: 2
-          },
-          {
-            alternative: :a4,
-            rating: 1
-          },
-          {
-            alternative: :a5,
-            rating: 5
-          }
-        ]
-      },
-      {
-        expert: :e4,
-        values: [
-          {
-            alternative: :a1,
-            rating: 3
-          },
-          {
-            alternative: :a2,
-            rating: 2
-          },
-          {
-            alternative: :a3,
-            rating: 1
-          },
-          {
-            alternative: :a4,
-            rating: 5
-          },
-          {
-            alternative: :a5,
-            rating: 4
-          }
-        ]                     
-      }
-    ]
-    
-    task = MathMethods::TaskModel.new(a, e, c, r)
-    result = MathMethods::BordsMethod.new(task).get_result
-    expect(result.range).to eq({1=>:a3, 2=>:a2, 3=>:a4, 4=>:a1, 5=>:a5})
-    expect(result.math_info).to eq(
-      [
-        {:alternative=>:a3, :sr=>2.4},
-        {:alternative=>:a2, :sr=>2.2},
-        {:alternative=>:a4, :sr=>2.1},
-        {:alternative=>:a1, :sr=>2.0},
-        {:alternative=>:a5, :sr=>1.3}
-      ]
-   )
+      )
+    }
+    it "Coefficient" do
+      expect(MathMethods::Concordation.new(task).coef).to eq(0.26) #0.2375 in book
+    end
+
+    it "Detection treshold" do
+      result = MathMethods::Concordation.d_t(5, 3)
+      expect(result).to be_within(0.01).of(0.02)
+    end
+
+    it "Using treshold(strong)" do
+      result = MathMethods::Concordation.u_t(5, 1)
+      expect(result).to be_within(0.01).of(0.848)
+    end
+
+    skip "Using treshold(weak)" do
+      result = MathMethods::Concordation.u_t(5, 2)
+      expect(result).to be_within(0.01).of(0.575)
+    end
   end
 
-  it 'Production example' do
+  context 'Production example' do
     e = [:e1, :e2, :e3, :e4, :e5, :e6, :e7, :e8, :e9, :e10]
     c = 
     [
@@ -230,7 +150,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a2,
-            rating: 3
+            rating: 2
           },
           {
             alternative: :a3,
@@ -238,7 +158,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 3
           },
           {
             alternative: :a5,
@@ -255,7 +175,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a2,
-            rating: 3
+            rating: 2
           },
           {
             alternative: :a3,
@@ -263,7 +183,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 3
           },
           {
             alternative: :a5,
@@ -284,11 +204,11 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a3,
-            rating: 1
+            rating: 2
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 1
           },
           {
             alternative: :a5,
@@ -334,7 +254,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a3,
-            rating: 2
+            rating: 4
           },
           {
             alternative: :a4,
@@ -342,7 +262,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a5,
-            rating: 4
+            rating: 2
           }
         ]                     
       },
@@ -355,7 +275,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a2,
-            rating: 3
+            rating: 2
           },
           {
             alternative: :a3,
@@ -363,7 +283,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 3
           },
           {
             alternative: :a5,
@@ -380,11 +300,11 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a2,
-            rating: 3
+            rating: 1
           },
           {
             alternative: :a3,
-            rating: 1
+            rating: 3
           },
           {
             alternative: :a4,
@@ -405,7 +325,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a2,
-            rating: 3
+            rating: 2
           },
           {
             alternative: :a3,
@@ -413,7 +333,7 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 3
           },
           {
             alternative: :a5,
@@ -434,31 +354,46 @@ RSpec.describe MathMethods::BordsMethod do
           },
           {
             alternative: :a3,
-            rating: 1
+            rating: 2
           },
           {
             alternative: :a4,
-            rating: 2
+            rating: 1
           },
           {
             alternative: :a5,
             rating: 4
           }
         ]
-      }                          
+      } 
     ]
+    s = e.map { |expert| { expert: expert, count_of_changes: 0 } }
 
-    task = MathMethods::TaskModel.new(a, e, c, r)
-    result = MathMethods::BordsMethod.new(task).get_result
-    expect(result.range).to eq({1=>:a3, 2=>:a4, 3=>:a2, 4=>:a5, 5=>:a1})
-    expect(result.math_info).to eq(
-      [
-        {:alternative=>:a3, :sr=>3.79},
-        {:alternative=>:a4, :sr=>2.82},
-        {:alternative=>:a2, :sr=>2.03},
-        {:alternative=>:a5, :sr=>0.98},
-        {:alternative=>:a1, :sr=>0.09}
-      ]
-   )
+    it 'Coefficient' do
+      task = MathMethods::TaskModel.new(a, e, c, r)
+      expect(MathMethods::Concordation.new(task).coef).to be_within(0.001).of(0.667)
+    end
+
+    it 'Feedback' do
+      task = MathMethods::TaskModel.new(a, e, c, r, s)
+      result = 
+      {
+        expert: :e10,
+        cf: 0.676091,
+        old_range: [
+          {alternative: :a1, rating: 5},
+          {alternative: :a2, rating: 3},
+          {alternative: :a3, rating: 2},
+          {alternative: :a4, rating: 1},
+          {alternative: :a5, rating: 4}],
+        new_range: [
+          {alternative: :a1, rating: 5}, 
+          {alternative: :a2, rating: 3}, 
+          {alternative: :a4, rating: 2}, 
+          {alternative: :a3, rating: 1}, 
+          {alternative: :a5, rating: 4}]
+      }
+      expect(MathMethods::OrdinaryFeedback.new(task).get).to eq(result)
+    end
   end
 end

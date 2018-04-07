@@ -1,51 +1,40 @@
 class MathMethods::OrdinaryFeedback
-  attr_reader :competitions
-  attr_reader :ranges
-  attr_reader :alt_count
-  attr_reader :exp_count
-  attr_reader :expert_stats
-  attr_reader :consistency_coef
+  attr_reader :task
 
-  def initialize(args)
-    @competitions = args[:competitions]
-    @ranges = args[:ranges]
-    @expert_stats = args[:expert_stats]
-    @exp_count = @competitions.length
-    @alt_count = @ranges[0].length
-    @consistency_coef = MathMethods::NewConcordation.new(ranges: @ranges, competitions: competitions).get_coef
+  def initialize(task)
+    @task = task
   end
 
-  def generate_request
-    result = {}
-    
-    fill_hash(result, 0)
-    expert_stats.each_with_index do |stat, i|
-      if stat < result[:count_of_changes] ||
-         (stat == result[:count_of_changes] && competitions[i] < result[:competition])
-        fill_hash(result, i)
+  def get
+    weak_expert = task.experts.first
+    task.experts.each do |e|
+      if task.stats.get_for(e) < task.stats.get_for(weak_expert) ||
+         (
+           task.competitions.get_for(e) <= task.competitions.get_for(weak_expert) &&
+           task.stats.get_for(e) == task.stats.get_for(weak_expert)
+         )
+        weak_expert = e
       end
     end
-    
-    weak_range = ranges[result[:expert_index]]
-    new_ranges = MathMethods::NewConcordation.get_new_ranges(weak_range, 1)
-    ranges_with_cf = new_ranges.map do |nr|
-      temp_ranges = ranges.clone
-      temp_ranges[result[:expert_index]] = nr
-      [MathMethods::NewConcordation.new(ranges: temp_ranges, competitions: competitions).get_coef, nr]
+    weak_range = task.original_ratings.select { |h| h[:expert] == weak_expert }.first
+    suggestions = MathMethods::Concordation.generate_ranges(weak_range[:values], 1)
+
+    result = suggestions.map do |s|
+      new_ratings = task.original_ratings.reject { |h| h[:expert] == weak_expert }
+      new_ratings << {
+        expert: weak_expert,
+        values: s
+      }
+      tmp_task = MathMethods::TaskModel.new(task.alternatives, task.experts, task.original_competitions, new_ratings)
+      [s, MathMethods::Concordation.new(tmp_task).coef]
     end
-    best_range = ranges_with_cf.max #тонкий момент, возможно не всегда стоит выбирать максимальный 
-                                    #так как он может затрагивать изменения ранжирования высоких рангов(например поменять местами альтернативы 1 и 2)
-    result[:best_range] = best_range[1]
-    result[:new_cf]     = best_range[0]
+    best = result.sort { |r1, r2| r2[1] <=> r1[1] }.first
 
-    result
+    {
+      expert: weak_expert,
+      cf:     best.last,
+      old_range:  weak_range[:values],
+      new_range:  best.first
+    }
   end
-
-  private
-
-  def fill_hash(hash, index)
-    hash[:competition] = competitions[index]
-    hash[:count_of_changes] = expert_stats[index]
-    hash[:expert_index]     = index
-  end 
 end
