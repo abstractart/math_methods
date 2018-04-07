@@ -10,10 +10,9 @@ class MathMethods::TaskModel
   def initialize(alternatives, experts, competitions, ratings, stats = [])
     @experts          = experts
     @alternatives     = alternatives
-    @ratings          = MathMethods::RatingsCollection.new(ratings)
+    @ratings          = ratings
     @competitions     = MathMethods::CompetitionsCollection.new(competitions)
     @stats            = MathMethods::StatsCollection.new(stats)
-    @original_ratings = ratings
     @original_competitions = competitions
   end
 end
