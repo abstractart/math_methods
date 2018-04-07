@@ -36,7 +36,7 @@ class MathMethods::Concordation
   end
  
   def self.generate_ranges(range, l)
-    range_hash = range.map {|r| [r[:rating], r[:alternative]]}.to_h
+    range_hash = Hash[range.to_a.reverse]
     
     ranges = (1..range.size - l).to_a.map do |r|
       tmp_range = range_hash.clone
