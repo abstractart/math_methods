@@ -6,4 +6,11 @@ class MathMethods::Solution
     @range     = range
     @math_info = math_info
   end
+  
+  def to_h
+    {
+      range: range,
+      math_info: math_info
+    }
+  end
 end
