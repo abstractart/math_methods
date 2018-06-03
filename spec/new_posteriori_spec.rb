@@ -288,5 +288,47 @@ RSpec.describe MathMethods::NewPosterioriCompetition do
       )
 
     end
+
+    it 'loop (for debug only)', skip: true do
+      competitions = [
+        { expert: :e1, cf: 0.25 },
+        { expert: :e2, cf: 0.23 },
+        { expert: :e3, cf: 0.17 },
+        { expert: :e4, cf: 0.15 },
+        { expert: :e5, cf: 0.1 },
+        { expert: :e6, cf: 0.05 },
+        { expert: :e7, cf: 0.05 },
+      ]
+      result_range = {8 => :a, 4.94 => :b}
+
+      1000.times do
+        task = MathMethods::CardinalTask.new(
+          alternatives,
+          experts,
+          competitions,
+          ratings,
+          [],
+          10
+        )
+
+        c = MathMethods::NewPosterioriCompetition.new(task, result_range, :cardinal)
+        competitions = c.get_new_coefficients.to_a.map do |cmp|
+          {expert: cmp.first, cf: cmp.last}
+        end
+      end
+
+      expect(competitions).to eq(
+        {
+          :e1 => 0.2428,
+          :e2 => 0.2374,
+          :e3 => 0.1639,
+          :e4 => 0.1445,
+          :e5 => 0.0966,
+          :e6 => 0.0501,
+          :e7 => 0.0501
+        }
+      )
+
+    end
   end
 end
